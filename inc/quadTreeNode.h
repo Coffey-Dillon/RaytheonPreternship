@@ -23,12 +23,15 @@ typedef struct{
 		}
 	}
 
-	node() : data(), parent(), child0(), child1(), child2(), child3() {
+	node() : data(), point(), parent(), child0(), child1(), child2(), child3() {
 		checkMemory();
 	}
-	node(T dataIn) : data(dataIn), parent(), child0(), child1(), child2(), child3() {
+	node(T dataIn) : data(dataIn), point(), parent(), child0(), child1(), child2(), child3() {
 		checkMemory();
 	}
+
+
+	node(T dataIn, point pIn) : data(dataIn), point(pIn), parent(), child0(), child1(), child2(), child3() {
 	
 	~node(){
 		delete child0;
@@ -47,7 +50,6 @@ typedef struct{
 		child3 = copy.child3;
 	}
 
-	node* head;
 } node;
 
 template<class T>
