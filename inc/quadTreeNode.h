@@ -6,10 +6,20 @@
 
 #include "satellite.h"
 
-template<class T>
-typedef struct{
+template<typename T>
+struct point{
+	T rad;
+	T inc;
+	T azu;
+
+	point<T>(){}
+};
+
+
+template<typename T, typename S>
+struct node{
 	T data;
-	point p;
+	point<S> p;
 
 	node* parent;
 	node* child0;
@@ -23,15 +33,16 @@ typedef struct{
 		}
 	}
 
-	node() : data(), point(), parent(), child0(), child1(), child2(), child3() {
+	node() : data(), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 	}
-	node(T dataIn) : data(dataIn), point(), parent(), child0(), child1(), child2(), child3() {
+	node(T dataIn) : data(dataIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 	}
 
-
-	node(T dataIn, point pIn) : data(dataIn), point(pIn), parent(), child0(), child1(), child2(), child3() {
+	node(T dataIn, point<S> pIn) : data(dataIn), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+		checkMemory();
+	}
 	
 	~node(){
 		delete child0;
@@ -50,14 +61,11 @@ typedef struct{
 		child3 = copy.child3;
 	}
 
-} node;
 
-template<class T>
-typedef struct{
-	T rad;
-	T inc;
-	T azu;
-} point;
+
+
+
+};
 
 
 #endif
