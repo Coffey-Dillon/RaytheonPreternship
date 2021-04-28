@@ -2,7 +2,7 @@
 PP := g++
 
 # CXXFLAGS are the complier flags for when we compile C++
-FLAGS := -00 -g -Wall -Wextra -Wconversion -Wshadow -pedantic -Werror
+FLAGS := -O0 -g -Wall -Wextra -Wconversion -Wshadow -pedantic -Werror
 CXXFLAGS := -m64 -std=c++11 -Weffc++ $(FLAGS)
 
 # Folders
@@ -23,3 +23,9 @@ clean:
 	rm -rf $(OBJ) $(EXE)
 
 #TODO add commands to make objects, and tests
+$(TST)/%.o: $(TST)/%.cpp 
+	$(PP) $(FLAGS) -c -o $@ $^
+
+test-%: $(TST)/unit_%.o
+	$(PP) -o $(EXE)/$(@F) $^
+

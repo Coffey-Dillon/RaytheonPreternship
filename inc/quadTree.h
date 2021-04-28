@@ -12,7 +12,7 @@ template<class T>
 class quadTree{
 
 	private:
-		node* head = new node();
+		node* head;
 
 		int depth;
 
@@ -20,6 +20,10 @@ class quadTree{
 		quadTree() : head(NULL) {}
 
 		~quadTree(){
+			delete head->child0
+			delete head->child1
+			delete head->child2
+			delete head->child3
 			delete head;
 		}
 		
@@ -49,6 +53,17 @@ class quadTree{
 		}
 
 		int getCoverage() {}
+
+		// Assignment operator
+		quadTree<T>& operator=(const quadTree<T>& rhs){
+			if(this != &rhs){
+				this->head = rhs->head;			
+			}
+		}
 		
+		//TODO finish print operator for whole tree
+		friend std::ostream& operator<<(std::ostream& output, const quadTree<T> printTree){
+			output << printTree.head << std::endl;
+		}
 };
 #endif
