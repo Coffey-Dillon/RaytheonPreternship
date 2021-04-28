@@ -13,6 +13,11 @@ struct point{
 	T azu;
 
 	point<T>(){}
+
+	friend std::ostream& operator<<(std::ostream& output, const point<T>& printData){
+		output << "radius " << printData.rad << ", inclination " << printData.inc << ", azimuth " << printData.azu;
+		return output;
+	}
 };
 
 
@@ -61,10 +66,12 @@ struct node{
 		child3 = copy.child3;
 	}
 
-
-
-
-
+	// Friend method to print node
+	friend std::ostream& operator<<(std::ostream& output, const node<T, S>& printNode){
+		output << "Node data" << printNode.data << std::endl;
+		output << "Node point" << printNode.p << std::endl;
+		return output;
+	}
 };
 
 

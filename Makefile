@@ -23,14 +23,8 @@ clean:
 	rm -rf $(OBJ) $(EXE)
 
 #TODO add commands to make objects, and tests
-#TODO fix compilier warning with tests so that all flags can be used
+$(TST)/%.o: $(TST)/%.cpp 
+	$(PP) $(FLAGS) -c -o $(OBJ)/$(@F) $^
 
-$(TST)/%.o: $(TST)/%.cpp
-	$(PP) $(FLAGS) -c -o $@ $^
-
-test: $(TST)/unit_node.o $(TST)/unit_quadTree.o 
-	$(PP) -o $(EXE)/unit_node $(EXE)/unit_quadTree $^
-
-
-
-
+test-%: $(TST)/unit_%.o
+	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F) 
