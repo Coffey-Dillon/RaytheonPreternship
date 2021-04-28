@@ -24,8 +24,8 @@ clean:
 
 #TODO add commands to make objects, and tests
 $(TST)/%.o: $(TST)/%.cpp 
-	$(PP) $(FLAGS) -c -o $@ $^
+	$(PP) $(FLAGS) -c -o $(OBJ)/$(@F) $^
 
 test-%: $(TST)/unit_%.o
-	$(PP) -o $(EXE)/$(@F) $^
+	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F) 
 
