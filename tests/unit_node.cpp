@@ -8,11 +8,11 @@
 
 int main(){
 	
-	node<int, int> nodeParent(10);
-	node<int, int> nodeChild0(0);
-	node<int, int> nodeChild1(1);
-	node<int, int> nodeChild2(2);
-	node<int, int> nodeChild3(3);
+	node<double, double> nodeParent(10);
+	node<double, double> nodeChild0(0);
+	node<double, double> nodeChild1(1);
+	node<double, double> nodeChild2(2);
+	node<double, double> nodeChild3(3);
 
 	COUT << "Testing Node: Parent should have value 10 and children0-3" << ENDL;
 	

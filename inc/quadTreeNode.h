@@ -6,6 +6,15 @@
 
 #include "satellite.h"
 
+#define COUT std::cout
+#define ENDL std::endl
+
+//Globals
+//TODO make a macros.h file with globals, libraries, and define statements
+double earthRad = 6370;
+double pi = 3.14;
+
+
 template<typename T>
 struct point{
 	T rad;
@@ -13,9 +22,10 @@ struct point{
 	T azu;
 
 	point<T>(){}
+	point<T>(T radius, T inclination, T azumith) : rad(radius), inc(inclination), azu(azumith) {}
 
 	friend std::ostream& operator<<(std::ostream& output, const point<T>& printData){
-		output << "radius " << printData.rad << ", inclination " << printData.inc << ", azimuth " << printData.azu;
+		output << "radius: " << printData.rad << ", inclination: " << printData.inc << ", azimuth: " << printData.azu;
 		return output;
 	}
 };
@@ -25,6 +35,7 @@ template<typename T, typename S>
 struct node{
 	T data;
 	point<S> p;
+	int lvl;				//depth in the quadTree that the node lies on. inital 4 children nodes are lvl 1
 
 	node* parent;
 	node* child0;
@@ -38,15 +49,31 @@ struct node{
 		}
 	}
 
-	node() : data(), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node() : data(), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
-	}
-	node(T dataIn) : data(dataIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
-		checkMemory();
+		if(parent){
+			lvl = parent->lvl + 1;
+		}
+		if(!locate_node(parent))
+			COUT << "Failed to assign points when creating node.\n" << ENDL;
 	}
 
-	node(T dataIn, point<S> pIn) : data(dataIn), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn) : data(dataIn), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
+		if(parent){
+			lvl = parent->lvl + 1;
+		}
+		if(!locate_node(parent))
+			COUT << "Failed to assign points when creating node.\n" << ENDL;
+	}
+
+	node(T dataIn, point<S> pIn) : data(dataIn), lvl(1), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+		checkMemory();
+		if(parent){
+			lvl = parent->lvl + 1;
+		}
+		if(!locate_node(parent))
+			COUT << "Failed to assign points when creating node.\n" << ENDL;
 	}
 	
 	~node(){
@@ -64,6 +91,69 @@ struct node{
 		child1 = copy.child1;
 		child2 = copy.child2;
 		child3 = copy.child3;
+	}
+	
+	// Determines the values to be stored in the point struct of each node.
+	bool locate_node(const node* Parent){
+		if(Parent){
+			if(Parent->p.inc == 0 && parent->p.azu == 0){
+				child0->p.inc = 0;
+				child0->p.azu = 0;
+				child0->p.rad = earthRad;
+				
+				child1->p.inc = pi / 2;
+				child1->p.azu = 2 * pi / 3;
+				child1->p.rad = earthRad;
+				
+				child2->p.inc = pi / 2;
+				child2->p.azu = 4 * pi / 3;
+				child2->p.rad = earthRad;
+
+				child3->p.inc = pi / 2;
+				child3->p.azu = 6 * pi / 3;
+				child3->p.rad = earthRad;
+			} else{
+				child0->p = Parent->p;
+				
+				child1->p.inc = Parent->p.inc - (2 * pi / (3 * Parent->lvl))/4;
+				child1->p.azu = Parent->p.azu - (2 * pi / (3 * Parent->lvl))/4;
+				child1->p.rad = earthRad;
+				
+				child2->p.inc = Parent->p.inc + (2 * pi / (3 * Parent->lvl))/4;
+				child2->p.azu = Parent->p.azu;
+				child2->p.rad = earthRad;
+				
+				child3->p.inc = Parent->p.inc - (2 * pi / (3 * Parent->lvl))/4;
+				child3->p.azu = Parent->p.azu + (2 * pi / (3 * Parent->lvl))/4;
+				child3->p.rad = earthRad;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	// Assignment operator
+	node& operator=(const node& assign){
+		if(this != assign){
+			this->data = assign.data;
+			this->p = assign.p;
+			this->parent = assign.parent;
+			this->child0 = assign.child0;
+			this->child1 = assign.child1;
+			this->child2 = assign.child2;
+			this->child3 = assign.child3;
+		}
+	}
+	node* operator=(const node* assign){
+		if(this != assign){
+			this->data = assign.data;
+			this->p = assign->p;
+			this->parent = assign->parent;
+			this->child0 = assign->child0;
+			this->child1 = assign->child1;
+			this->child2 = assign->child2;
+			this->child3 = assign->child3;
+		}
 	}
 
 	// Friend method to print node
