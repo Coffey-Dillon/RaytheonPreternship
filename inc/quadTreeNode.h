@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <math.h>
 
 #include "satellite.h"
 
@@ -21,8 +22,17 @@ struct point{
 	T inc;
 	T azu;
 
-	point<T>(){}
+	point<T>() {}
 	point<T>(T radius, T inclination, T azumith) : rad(radius), inc(inclination), azu(azumith) {}
+
+	// Assignment operator
+	point<T>* operator=(point<T>* assign){
+		this->rad = assign->rad;
+		this->inc = assign->inc;
+		this->azu = assign->azu;
+
+		return assign;
+	}
 
 	friend std::ostream& operator<<(std::ostream& output, const point<T>& printData){
 		output << "radius: " << printData.rad << ", inclination: " << printData.inc << ", azimuth: " << printData.azu;
@@ -36,7 +46,8 @@ struct node{
 	T data;
 	point<S> p;
 	int lvl;				//depth in the quadTree that the node lies on. inital 4 children nodes are lvl 1
-
+	bool covered;
+	
 	node* parent;
 	node* child0;
 	node* child1;
@@ -49,31 +60,18 @@ struct node{
 		}
 	}
 
-	node() : data(), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(): data(), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
-		if(parent){
-			lvl = parent->lvl + 1;
-		}
-		if(!locate_node(parent))
-			COUT << "Failed to assign points when creating node.\n" << ENDL;
+		p = new point<S>();
 	}
-
+	
 	node(T dataIn) : data(dataIn), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
-		if(parent){
-			lvl = parent->lvl + 1;
-		}
-		if(!locate_node(parent))
-			COUT << "Failed to assign points when creating node.\n" << ENDL;
+		p = new point<S>();
 	}
 
-	node(T dataIn, point<S> pIn) : data(dataIn), lvl(1), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn, point<S> pIn) : data(dataIn), lvl(1), parent(NULL), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
-		if(parent){
-			lvl = parent->lvl + 1;
-		}
-		if(!locate_node(parent))
-			COUT << "Failed to assign points when creating node.\n" << ENDL;
 	}
 	
 	~node(){
@@ -81,7 +79,7 @@ struct node{
 		delete child1;
 		delete child2;
 		delete child3;
-		delete parent;
+		delete p;
 	}
 
 	node(const node& copy){
@@ -94,42 +92,45 @@ struct node{
 	}
 	
 	// Determines the values to be stored in the point struct of each node.
-	bool locate_node(const node* Parent){
-		if(Parent){
-			if(Parent->p.inc == 0 && parent->p.azu == 0){
-				child0->p.inc = 0;
-				child0->p.azu = 0;
-				child0->p.rad = earthRad;
+	// Uses the point object help by the current node to determine the point object values 
+	//  for the children of the node.
+	bool locate_children(){
+		if(p.rad == 0){
+			child0->p.inc = 0;
+			child0->p.azu = 0;
+			child0->p.rad = earthRad;
 				
-				child1->p.inc = pi / 2;
-				child1->p.azu = 2 * pi / 3;
-				child1->p.rad = earthRad;
+			child1->p.inc = pi / 2;
+			child1->p.azu = 2 * pi / 3;
+			child1->p.rad = earthRad;
 				
-				child2->p.inc = pi / 2;
-				child2->p.azu = 4 * pi / 3;
-				child2->p.rad = earthRad;
+			child2->p.inc = pi / 2;
+			child2->p.azu = 4 * pi / 3;
+			child2->p.rad = earthRad;
 
-				child3->p.inc = pi / 2;
-				child3->p.azu = 6 * pi / 3;
-				child3->p.rad = earthRad;
-			} else{
-				child0->p = Parent->p;
+			child3->p.inc = pi / 2;
+			child3->p.azu = 6 * pi / 3;
+			child3->p.rad = earthRad;
+		} else{
+			child0->lvl = lvl + 1;
+			child0->p = p;
 				
-				child1->p.inc = Parent->p.inc - (2 * pi / (3 * Parent->lvl))/4;
-				child1->p.azu = Parent->p.azu - (2 * pi / (3 * Parent->lvl))/4;
-				child1->p.rad = earthRad;
+			child1->lvl = lvl + 1;
+			child1->p.inc = p.inc - (2 * pi / (3 * lvl))/4;
+			child1->p.azu = p.azu - (2 * pi / (3 * lvl))/4;
+			child1->p.rad = earthRad;
 				
-				child2->p.inc = Parent->p.inc + (2 * pi / (3 * Parent->lvl))/4;
-				child2->p.azu = Parent->p.azu;
-				child2->p.rad = earthRad;
+			child2->lvl = lvl + 1;
+			child2->p.inc = p.inc + (2 * pi / (3 * lvl))/4;
+			child2->p.azu = p.azu;
+			child2->p.rad = earthRad;
 				
-				child3->p.inc = Parent->p.inc - (2 * pi / (3 * Parent->lvl))/4;
-				child3->p.azu = Parent->p.azu + (2 * pi / (3 * Parent->lvl))/4;
-				child3->p.rad = earthRad;
-			}
-			return true;
+			child3->lvl = lvl + 1;
+			child3->p.inc = p.inc - (2 * pi / (3 * lvl))/4;
+			child3->p.azu = p.azu + (2 * pi / (3 * lvl))/4;
+			child3->p.rad = earthRad;
 		}
-		return false;
+		return true;
 	}
 
 	// Assignment operator
@@ -158,8 +159,8 @@ struct node{
 
 	// Friend method to print node
 	friend std::ostream& operator<<(std::ostream& output, const node<T, S>& printNode){
-		output << "Node data" << printNode.data << std::endl;
-		output << "Node point" << printNode.p << std::endl;
+		output << "Node data: " << printNode.data << std::endl;
+		output << "Node point: " << printNode.p << std::endl;
 		return output;
 	}
 };
