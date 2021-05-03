@@ -12,6 +12,9 @@ EXE := exe
 OBJ := obj
 TST := tests
 
+#File groups
+TESTS:= $(TST)/unit_node.o $(TST)/unit_quadTree.o
+
 
 # make initialize
 initialize:
@@ -23,8 +26,10 @@ clean:
 	rm -rf $(OBJ) $(EXE)
 
 #TODO add commands to make objects, and tests
+test: $(TESTS)
+
 $(TST)/%.o: $(TST)/%.cpp 
 	$(PP) $(FLAGS) -c -o $(OBJ)/$(@F) $^
 
 test-%: $(TST)/unit_%.o
-	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F) 
+	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F)
