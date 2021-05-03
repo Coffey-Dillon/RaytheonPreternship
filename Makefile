@@ -33,4 +33,3 @@ $(TST)/%.o: $(TST)/%.cpp
 
 test-%: $(TST)/unit_%.o
 	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F)
-
