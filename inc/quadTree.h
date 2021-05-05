@@ -78,25 +78,41 @@ class quadTree{
 		double getCoverage(node<T, S>* curr){
 			double coverage = 0.0;
 			if(curr->child0 == NULL || curr->covered){
-				return 1.0 / pow(4, curr->lvl);			
+				if(covered){
+					return 1.0 / pow(4, curr->lvl);	
+				} else{
+					return 0.0;
+				}	
 			} else{
 				coverage += getCoverage(curr->child0);
 			}
 			
 			if(curr->child1 == NULL || curr->covered){
-				return 1.0 / pow(4, curr->lvl);			
+				if(covered){		
+					return 1.0 / pow(4, curr->lvl);			
+				} else{
+					return 0.0;
+				}
 			} else{
 				coverage += getCoverage(curr->child1);
 			}	
 			
 			if(curr->child2 == NULL || curr->covered){
-				return 1.0 / pow(4, curr->lvl);			
+				if(curr->covered){
+					return 1.0 / pow(4, curr->lvl);			
+				} else{
+					return 0.0;
+				}
 			} else{
 				coverage += getCoverage(curr->child2);
 			}
 	
 			if(curr->child3 == NULL || curr->covered){
-				return 1.0 / pow(4, curr->lvl);			
+				if(covered){
+					return 1.0 / pow(4, curr->lvl);			
+				} else{
+					return 0.0; 
+				}		
 			} else{
 				coverage += getCoverage(curr->child3);
 			}
