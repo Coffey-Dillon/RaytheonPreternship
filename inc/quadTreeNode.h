@@ -34,6 +34,8 @@ struct point{
 		return assign;
 	}
 
+	point<T>(T r, T i, T a) : rad(r), inc(i), azu(a)  {} 
+
 	friend std::ostream& operator<<(std::ostream& output, const point<T>& printData){
 		output << "radius: " << printData.rad << ", inclination: " << printData.inc << ", azimuth: " << printData.azu;
 		return output;
