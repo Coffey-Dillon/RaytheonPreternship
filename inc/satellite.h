@@ -5,11 +5,8 @@
 #include <cstdlib>		// for NULL
 #include <cmath>		// for M_PI
 
+#include "macros.h"
 #include "quadTreeNode.h"
-
-#define EARTH_RADIUS 6372 //km
-#define COUT std::cout
-#define ENDL std::endl
 
 template<class T>
 class Satellite{
