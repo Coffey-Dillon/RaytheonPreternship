@@ -1,14 +1,8 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
-#include <cstdlib>
-#include <iostream>
-#include <math.h>
-
 #include "quadTreeNode.h"
 #include "satellite.h"
-
-#define earthRad 6370
 
 template<class T, class S>
 class quadTree{

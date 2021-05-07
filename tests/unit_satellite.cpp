@@ -18,7 +18,7 @@ int main() {
 	COUT << "central Earth ang: " << sat1->getAlpha() << ENDL;
 	COUT << "view: " << sat1->getView() << ENDL;
 	COUT << "cap radius: " << sat1->getCapRadius() << ENDL;
-	COUT << "half arch len: " << sat1->getHalfArchLen() << ENDL;
+	COUT << "half arc len: " << sat1->getHalfArchLen() << ENDL;
 	COUT << "coverage fraction: " << sat1->getFraction() << ENDL;
 
 	return 0;

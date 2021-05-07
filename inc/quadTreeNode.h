@@ -1,12 +1,6 @@
 #ifndef QUADTREENODE_H
 #define QUADTREENODE_H
 
-#include <cstdlib>
-#include <iostream>
-#include <math.h>
-
-#define COUT std::cout
-#define ENDL std::endl
 
 //Globals
 //TODO make a macros.h file with globals, libraries, and define statements
