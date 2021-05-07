@@ -1,7 +1,8 @@
 #ifndef QUADTREENODE_H
 #define QUADTREENODE_H
 
-#include "satellite.h"
+#include "macros.h"
+
 
 //Globals
 //TODO make a macros.h file with globals, libraries, and define statements
@@ -92,18 +93,25 @@ struct node{
 			child0->p.inc = 0;
 			child0->p.azu = 0;
 			child0->p.rad = earthRad;
-				
+			child0->lvl = 1;
+
 			child1->p.inc = pi / 2;
 			child1->p.azu = 2 * pi / 3;
 			child1->p.rad = earthRad;
+			child1->lvl = 1;
+
 				
 			child2->p.inc = pi / 2;
 			child2->p.azu = 4 * pi / 3;
 			child2->p.rad = earthRad;
+			child2->lvl = 1;
+
 
 			child3->p.inc = pi / 2;
 			child3->p.azu = 6 * pi / 3;
 			child3->p.rad = earthRad;
+			child3->lvl = 1;
+
 		} else{
 			child0->lvl = lvl + 1;
 			child0->p = p;

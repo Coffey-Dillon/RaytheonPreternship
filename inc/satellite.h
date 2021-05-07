@@ -25,7 +25,7 @@ class Satellite{
 			checkMemory(); 
 		}
 
-		Satellite(T incIn, T azuIn, T altIn, T viewIn) : position(0, incIn, azuIn), alt(altIn), view(viewIn), alpha() {
+		Satellite(T incIn, T azuIn, T altIn, T viewIn) : position(), alt(altIn), view(viewIn), alpha() {
 			position = new point<T>(0, incIn, azuIn);
 			setRadius();
 			setAlpha(); 
@@ -82,7 +82,8 @@ class Satellite{
 
 		/* fraction of spherical earth coverage */
 		double getFraction() const {
-			return (1 - cos(alpha)) / 2;	
+			return (4 * M_PI * sin(view/2) * sin(view/2)) / (4 * M_PI);  
+			//return (1 - cos(alpha)) / 2;	
 		}
 
 		/* half arch length of FoV cap in km */ 
