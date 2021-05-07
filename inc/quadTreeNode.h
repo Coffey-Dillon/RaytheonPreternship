@@ -1,6 +1,8 @@
 #ifndef QUADTREENODE_H
 #define QUADTREENODE_H
 
+#include "macros.h"
+
 
 //Globals
 //TODO make a macros.h file with globals, libraries, and define statements

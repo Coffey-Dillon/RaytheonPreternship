@@ -1,6 +1,7 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
+#include "macros.h"
 #include "quadTreeNode.h"
 #include "satellite.h"
 
