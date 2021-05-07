@@ -1,15 +1,9 @@
 #ifndef QUADTREENODE_H
 #define QUADTREENODE_H
 
-<<<<<<< HEAD
-#include "macros.h"
-
-
-=======
 #include "./macros.h"
->>>>>>> fixed no type called point error
-//Globals
-//TODO make a macros.h file with globals, libraries, and define statements
+
+
 double earthRad = 6370;
 double pi = 3.14;
 
