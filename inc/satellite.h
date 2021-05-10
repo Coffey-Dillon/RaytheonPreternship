@@ -38,7 +38,9 @@ class Satellite{
 			setAlpha();
 			checkMemory();
 		} 
-
+		
+		Satellite(Satellite<T>& sat) {position = sat.position; alt = sat.alt; view = sat.view; alpha = sat.alpha;}
+		
 		~Satellite() {
 			delete position;
 		};
