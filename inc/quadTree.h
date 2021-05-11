@@ -86,15 +86,15 @@ class quadTree{
 		void populate(node<T, S>* parent, Satellite<S>* sat, int dep, double percent){
 			if(dep < 0){
 				int calcDep = (int) ((log(1.0/ (sat->getFraction() * (1 + percent))) / log(4.0)) + 1.0);
+				depth = calcDep;
 				populate(parent, sat, calcDep, percent);
 			} else if(dep > 0){				
-				
+
 				increaseDepth(parent);
 				populate(parent->child0, sat, dep-1, percent);
 				populate(parent->child1, sat, dep-1, percent);
 				populate(parent->child2, sat, dep-1, percent);
 				populate(parent->child3, sat, dep-1, percent);
-
 
 			} else{
 				double temp = 0;
@@ -106,108 +106,64 @@ class quadTree{
 			}			
 		}
 
-		double fillCovered(node<T, S>* parent, Satellite<S>* sat, double targetPercent, double &currPercent, int childNum){
-			if(targetPercent >= 1.0){
-				COUT << "target percentage is too high" << ENDL;
-				return -1;
+		void fillCovered(node<T, S>* parent, Satellite<S>* sat, double targetPercent, double currPercent, int childNum){
+			if(targetPercent <= currPercent){
+					return; 
 			}
+			increaseDepth(parent);
+			double needed = targetPercent - currPercent;
+			double topLevel = 1.0 / pow(4, depth);
+			double childPercent = 1.0/ pow(4, parent->child0->lvl);
+			double ctopPercent = (childPercent/ topLevel)/10;
+			double temp;
 
-			while(targetPercent > currPercent){
-				if((1 / pow(4, parent->lvl)) / sat->getFraction() > 0.25 && currPercent == 0){
-					increaseDepth(parent);
-					parent->child0->data = new Satellite<S>(parent->child0->p.inc , parent->child0->p.azu, sat->getRadius(), sat->getView());
-					currPercent += 1/pow(4, parent->child0->lvl);
-					parent->child0->covered = true;
-					currPercent += fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
-					currPercent += fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
-					currPercent += fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
-				}else if(currPercent == 0){
-					increaseDepth(parent);
-					currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-				}
-				increaseDepth(parent);
-				double percentNeeded = (targetPercent - currPercent) / 3;
-				double numfilled = percentNeeded / (1 / pow(4, parent->child0->lvl));
-				double parentPercent = sat->getFraction();
-				double childPercent = 1.0 / pow(4, parent->child0->lvl);
-
-				// TODO add comments on what the cases do, see if this can be done more efficently
-				// 	maybe write a function that just takes the child number and 
-				COUT << currPercent << ENDL;
+			if(targetPercent < 0.25){
+				fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
+			} else{
 				switch(childNum){
+					case 0:		
+						fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
+						fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
+						fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
+						break;
 					case 1:
-						if(numfilled >= 2){
-							parent->child2->covered = true;
+						if(needed/3 >= 2 * ctopPercent){
+							parent->child2->covered = true;			
 							parent->child3->covered = true;
-							return 2.0 * childPercent / parentPercent; 
-						
-							if(numfilled >= 2){
-								parent->child0->covered = true;
-								return childPercent / parentPercent; 
-							} else if(numfilled > 3){
-								currPercent += fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							} else{
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							}
+							temp = currPercent + 2 * ctopPercent;
+							fillCovered(parent->child1, sat, targetPercent, temp, 0);
 						} else{
-							currPercent += fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
-							currPercent += fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
+							fillCovered(parent->child1, sat, targetPercent, currPercent, 2);
+							fillCovered(parent->child1, sat, targetPercent, currPercent, 3);
 						}
 						break;
+					
 					case 2:
-						if(numfilled >= 2){
-							parent->child1->covered = true;
+						if(needed/3 >= 2 * ctopPercent){
+							parent->child1->covered = true;			
 							parent->child3->covered = true;
-							return 2.0 * childPercent / parentPercent; 
-						
-							if(numfilled >= 2){
-								parent->child0->covered = true;
-								return childPercent / parentPercent; 
-							} else if(numfilled >= 3){
-								currPercent += fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							} else{
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							}
+							temp = currPercent + 2 * ctopPercent;
+							fillCovered(parent->child2, sat, targetPercent, temp, 0);
 						} else{
-							currPercent += fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
-							currPercent += fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
+							fillCovered(parent->child2, sat, targetPercent, currPercent, 1);
+							fillCovered(parent->child2, sat, targetPercent, currPercent, 3);
 						}
 						break;
+					
 					case 3:
-						if(numfilled >= 2){
-							parent->child1->covered = true;
+						if(needed/3 >= 2 * ctopPercent){
+							parent->child1->covered = true;			
 							parent->child2->covered = true;
-							return 2.0 * childPercent / parentPercent; 
-							
-							if(numfilled >= 2){
-								parent->child0->covered = true;
-								return childPercent / parentPercent; 
-							} else if(numfilled >= 3){
-								currPercent += fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							} else{
-								currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-							}
+						 	temp = currPercent + 2 * ctopPercent;
+							fillCovered(parent->child3, sat, targetPercent, temp, 0);
 						} else{
-							currPercent += fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
-							currPercent += fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
+							fillCovered(parent->child3, sat, targetPercent, currPercent, 1);
+							fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
 						}
 						break;
-					default:
-						if(numfilled > 1){
-							parent->child0->covered = true;
-							currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 1);
-							currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 2);
-							currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 3);
-							return childPercent / parentPercent; 
-						}
-						currPercent += fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
-						break;
-				}	
+				}
 			}
-			return 0;
+
 		}
 
 		// Creates a copy of the satellite object passed to the function and places it at the node
