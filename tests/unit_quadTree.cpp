@@ -44,7 +44,7 @@ template<class T, typename S>
 void test_03_populate_with_percent(quadTree<T, S> *qt){
 	node<T , S>* temp = qt->get_head(qt);
 	Satellite<S> *sat = new Satellite<S>(1.57, 2.09333, 7372, 0.05);
-	qt->populate(temp, sat, -1, 0.5);
+	qt->populate(temp, sat, -1, 0.9);
 	COUT << "Populated quadTree with stored pointers tot Satellite objects and covers only up to the target percent." << ENDL;
 	COUT << "Output traverses through child 1 until the botttom is reached. " << ENDL;
 	COUT << *qt << ENDL;

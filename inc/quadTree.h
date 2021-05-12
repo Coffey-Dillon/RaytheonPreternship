@@ -99,6 +99,7 @@ class quadTree{
 			} else{
 				double temp = 0;
 				fillCovered(parent, sat, percent, temp, 0);
+				condense(parent);
 				// parent->child0 = NULL;
 				//parent->child1 = NULL;
 				//parent->child2 = NULL;
@@ -107,61 +108,87 @@ class quadTree{
 		}
 
 		void fillCovered(node<T, S>* parent, Satellite<S>* sat, double targetPercent, double currPercent, int childNum){
-			if(targetPercent <= currPercent){
-					return; 
+			if(targetPercent/2 <= currPercent){
+				COUT << "fillCovered return " << "target: " << targetPercent << ", current: " << currPercent << ENDL;	
+				return; 
 			}
+
 			increaseDepth(parent);
 			double needed = targetPercent - currPercent;
 			double topLevel = 1.0 / pow(4, depth);
-			double childPercent = 1.0/ pow(4, parent->child0->lvl);
-			double ctopPercent = (childPercent/ topLevel)/10;
+			double childPercent = 1.0 / pow(4, parent->child0->lvl);
+			double ctopPercent = (childPercent / topLevel);
 			double temp;
 
 			if(targetPercent < 0.25){
 				fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
 			} else{
 				switch(childNum){
-					case 0:		
-						fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
-						fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
-						fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
+					case 0:	
+						parent->child0->covered = true;
+						temp = currPercent + ctopPercent;
+						fillCovered(parent->child1, sat, targetPercent, temp, 1);
+						fillCovered(parent->child2, sat, targetPercent, temp, 2);
+						fillCovered(parent->child3, sat, targetPercent, temp, 3);
 						break;
 					case 1:
-						if(needed/3 >= 2 * ctopPercent){
+						increaseDepth(parent);
+						if(needed/3 >= (3 * ctopPercent)){
 							parent->child2->covered = true;			
 							parent->child3->covered = true;
+							parent->child0->covered = true;
+							temp = currPercent + 3 * ctopPercent;
+							fillCovered(parent->child1, sat, targetPercent, temp, 1);
+						} else if(needed/3 >= (2 * ctopPercent)){
+							parent->child2->covered = true;
+							parent->child3->covered = true;
 							temp = currPercent + 2 * ctopPercent;
-							fillCovered(parent->child1, sat, targetPercent, temp, 0);
+							fillCovered(parent->child0, sat, targetPercent, temp, 1);
 						} else{
-							fillCovered(parent->child1, sat, targetPercent, currPercent, 2);
-							fillCovered(parent->child1, sat, targetPercent, currPercent, 3);
+							fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
+							fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
 						}
 						break;
 					
 					case 2:
-						if(needed/3 >= 2 * ctopPercent){
+						increaseDepth(parent);
+						if(needed/3 >= (3 * ctopPercent)){
 							parent->child1->covered = true;			
 							parent->child3->covered = true;
+							parent->child0->covered = true;
+							temp = currPercent + 3 * ctopPercent;
+							fillCovered(parent->child2, sat, targetPercent, temp, 2);
+						} else if(needed/3 >= (2 * ctopPercent)){
+							parent->child1->covered = true;
+							parent->child3->covered = true;
 							temp = currPercent + 2 * ctopPercent;
-							fillCovered(parent->child2, sat, targetPercent, temp, 0);
+							fillCovered(parent->child0, sat, targetPercent, temp, 2);
 						} else{
-							fillCovered(parent->child2, sat, targetPercent, currPercent, 1);
-							fillCovered(parent->child2, sat, targetPercent, currPercent, 3);
+							fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
+							fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
 						}
 						break;
 					
 					case 3:
-						if(needed/3 >= 2 * ctopPercent){
+						increaseDepth(parent);
+						if(needed/3 >= (3) * ctopPercent){
 							parent->child1->covered = true;			
 							parent->child2->covered = true;
-						 	temp = currPercent + 2 * ctopPercent;
-							fillCovered(parent->child3, sat, targetPercent, temp, 0);
+							parent->child0->covered = true;
+						 	temp = currPercent + 3 * ctopPercent;
+							fillCovered(parent->child3, sat, targetPercent, temp, 3);
+						} else if(needed/3 >= (2 * ctopPercent)){
+							parent->child1->covered = true;
+							parent->child2->covered = true;
+							temp = currPercent + 2 * ctopPercent;
+							fillCovered(parent->child0, sat, targetPercent, temp, 3);
 						} else{
-							fillCovered(parent->child3, sat, targetPercent, currPercent, 1);
-							fillCovered(parent->child3, sat, targetPercent, currPercent, 3);
+							fillCovered(parent->child1, sat, targetPercent, currPercent, 1);
+							fillCovered(parent->child2, sat, targetPercent, currPercent, 2);
 						}
 						break;
 				}
+
 			}
 
 		}

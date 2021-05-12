@@ -73,7 +73,6 @@ struct node{
 		delete child1;
 		delete child2;
 		delete child3;
-		delete p;
 	}
 
 	node(const node& copy){
