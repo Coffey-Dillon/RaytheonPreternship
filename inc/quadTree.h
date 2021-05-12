@@ -109,7 +109,6 @@ class quadTree{
 
 		void fillCovered(node<T, S>* parent, Satellite<S>* sat, double targetPercent, double currPercent, int childNum){
 			if(targetPercent/2 <= currPercent){
-				COUT << "fillCovered return " << "target: " << targetPercent << ", current: " << currPercent << ENDL;	
 				return; 
 			}
 
@@ -121,7 +120,8 @@ class quadTree{
 			double temp;
 
 			if(targetPercent < 0.25){
-				fillCovered(parent->child0, sat, targetPercent, currPercent, 0);
+				depth++;
+				fillCovered(parent->child0, sat, targetPercent / 0.25, currPercent, 0);
 			} else{
 				switch(childNum){
 					case 0:	
@@ -132,7 +132,7 @@ class quadTree{
 						fillCovered(parent->child3, sat, targetPercent, temp, 3);
 						break;
 					case 1:
-						increaseDepth(parent);
+						//increaseDepth(parent);
 						if(needed/3 >= (3 * ctopPercent)){
 							parent->child2->covered = true;			
 							parent->child3->covered = true;
@@ -151,7 +151,7 @@ class quadTree{
 						break;
 					
 					case 2:
-						increaseDepth(parent);
+						//increaseDepth(parent);
 						if(needed/3 >= (3 * ctopPercent)){
 							parent->child1->covered = true;			
 							parent->child3->covered = true;
@@ -170,7 +170,7 @@ class quadTree{
 						break;
 					
 					case 3:
-						increaseDepth(parent);
+						//increaseDepth(parent);
 						if(needed/3 >= (3) * ctopPercent){
 							parent->child1->covered = true;			
 							parent->child2->covered = true;
