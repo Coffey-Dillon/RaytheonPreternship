@@ -52,17 +52,17 @@ struct node{
 		}
 	}
 
-	node(): data(), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(): data(), lvl(0), covered(false), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 		p = new point<S>();
 	}
 	
-	node(T dataIn) : data(dataIn), lvl(1), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn) : data(dataIn), lvl(0), covered(true), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 		p = new point<S>();
 	}
 
-	node(T dataIn, point<S> pIn) : data(dataIn), lvl(1), parent(NULL), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn, point<S> pIn) : data(dataIn), lvl(0), covered(true), parent(NULL), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 	}
 	
@@ -71,7 +71,6 @@ struct node{
 		delete child1;
 		delete child2;
 		delete child3;
-		delete p;
 	}
 
 	node(const node& copy){
@@ -88,27 +87,27 @@ struct node{
 	//  for the children of the node.
 	bool locate_children(){
 		if(p.rad == 0){
+			child0->lvl = 1;
 			child0->p.inc = 0;
 			child0->p.azu = 0;
 			child0->p.rad = earthRad;
-			child0->lvl = 1;
 
+			child1->lvl = 1;
 			child1->p.inc = pi / 2;
 			child1->p.azu = 2 * pi / 3;
 			child1->p.rad = earthRad;
-			child1->lvl = 1;
 
 				
+			child2->lvl = 1;
 			child2->p.inc = pi / 2;
 			child2->p.azu = 4 * pi / 3;
 			child2->p.rad = earthRad;
-			child2->lvl = 1;
 
 
+			child3->lvl = 1;
 			child3->p.inc = pi / 2;
 			child3->p.azu = 6 * pi / 3;
 			child3->p.rad = earthRad;
-			child3->lvl = 1;
 
 		} else{
 			child0->lvl = lvl + 1;
