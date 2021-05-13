@@ -59,12 +59,12 @@ struct node{
 		p = new point<S>();
 	}
 	
-	node(T dataIn) : data(dataIn), lvl(0), covered(true), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn) : data(dataIn), lvl(0), covered(false), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 		p = new point<S>();
 	}
 
-	node(T dataIn, point<S> pIn) : data(dataIn), lvl(0), covered(true), parent(NULL), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
+	node(T dataIn, point<S> pIn) : data(dataIn), lvl(0), covered(false), parent(NULL), point<S>(pIn), parent(NULL), child0(NULL), child1(NULL), child2(NULL), child3(NULL) {
 		checkMemory();
 	}
 	
@@ -133,6 +133,15 @@ struct node{
 		return true;
 	}
 
+	void setCoverage(){
+		if(covered && parent != NULL && parent->child0 != NULL && parent->child1 != NULL && parent->child2 != NULL && parent->child3 != NULL){
+			if(parent->child0->covered && parent->child1->covered &&parent->child2->covered && parent->child3->covered){
+				parent->covered = true;
+				parent->setCoverage();
+			}
+		}
+	}
+
 	// Assignment operator
 	node& operator=(const node& assign){
 		if(this != assign){
@@ -161,6 +170,7 @@ struct node{
 	friend std::ostream& operator<<(std::ostream& output, const node<T, S>& printNode){
 		output << "Node data: " << printNode.data << std::endl;
 		output << "Node point: " << printNode.p << std::endl;
+		output << "Node covered: " << printNode.covered << std::endl;
 		return output;
 	}
 };

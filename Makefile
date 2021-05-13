@@ -13,11 +13,11 @@ OBJ := obj
 TST := tests
 
 #File groups
-TESTS:= $(TST)/unit_node.o $(TST)/unit_quadTree.o
+TESTS:= test-node test-quadTree test-satellite
 
 
 # make initialize
-initialize:
+initialize: 
 	rm -rf $(OBJ) $(EXE)
 	mkdir $(OBJ) $(EXE)
 
@@ -26,10 +26,14 @@ clean:
 	rm -rf $(OBJ) $(EXE)
 
 #TODO add commands to make objects, and tests
-test: $(TESTS) 
+test: initialize $(TESTS) 
 
 $(TST)/%.o: $(TST)/%.cpp 
 	$(PP) $(FLAGS) -c -o $(OBJ)/$(@F) $^
 
 test-%: $(TST)/unit_%.o 
 	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F)
+
+ui: 
+	$(PP) $(FLAGS) -c -o $(OBJ)/main.o $(SRC)/main.cpp
+	$(PP) $(FLAGS) -o $(EXE)/main $(OBJ)/main.o

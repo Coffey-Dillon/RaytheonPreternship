@@ -84,8 +84,8 @@ class Satellite{
 
 		/* fraction of spherical earth coverage */
 		double getFraction() const {
-			return (4 * M_PI * sin(view/2) * sin(view/2)) / (4 * M_PI);  
-			//return (1 - cos(alpha)) / 2;	
+			double height = EARTH_RADIUS - sqrt(pow(EARTH_RADIUS, 2) - pow(getCapRadius(), 2));
+			return (M_PI * height * EARTH_RADIUS) / (2 * M_PI * pow(EARTH_RADIUS, 2));
 		}
 
 		/* half arch length of FoV cap in km */ 
