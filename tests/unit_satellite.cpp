@@ -8,10 +8,10 @@
 int main() {
 	
 	
-	Satellite<double>* sat1 = new Satellite<double>();
+	Satellite<double>* sat1 = new Satellite<double>(0, 0, 600, 0.5);
 	
 	COUT << "Satellite attributes:" << ENDL;
-	COUT << "postition radius: " << sat1->getRadius() << ENDL;
+	COUT << "position radius: " << sat1->getRadius() << ENDL;
 	COUT << "azumithal ang: " << sat1->getAzu() << ENDL; 
 	COUT << "inclination: " << sat1->getInc() << ENDL;
 	COUT << "altitude: " << sat1->getAlt() << ENDL;
