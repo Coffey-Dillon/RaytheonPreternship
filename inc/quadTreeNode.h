@@ -1,11 +1,9 @@
 #ifndef QUADTREENODE_H
 #define QUADTREENODE_H
 
-#include "macros.h"
+#include "./macros.h"
 
 
-//Globals
-//TODO make a macros.h file with globals, libraries, and define statements
 double earthRad = 6370;
 double pi = 3.14;
 
