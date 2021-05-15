@@ -1,4 +1,3 @@
-
 /* Raytheon Preternship
  * main.cpp
  * Command line User Interface
@@ -16,7 +15,7 @@ double getAltitude(){
 		if(temp != -1){
 			COUT << "Please enter a positive value for altitude." << ENDL;		
 		}
-		COUT << "Enter altitude of satellites in kilometes above the surface of earth: ";
+		COUT << "Enter altitude of satellites in kilometers above the surface of Earth: ";
 		CIN >> temp;
 	}
 	COUT << "\n";
@@ -111,9 +110,7 @@ void interact(quadTree<T, S>* qt){
 		COUT << "\nChoose an interaction:\n" 
 			 << "\t1: Check total coverage.\n"
 			 << "\t2: Check total number of Satellites\n"
-			 << "\t3: Check coverage at a specific latitude and longitude.\n"
-			 << "\t4: Add additional satellites\n"
-			 << "\t5: Remove satellites\nInput: ";
+			 << "\t3: Check coverage at a specific latitude and longitude.\nInput: ";
 		CIN >> inter;
 
 		switch(inter){
@@ -196,6 +193,7 @@ int main(){
 			case 3: {
 				std::system("clear");
 				int userIn;
+				COUT << "------------------------------------------------------------------------------------------------\n\n";
 				COUT << "Welcome to custom constellation creation mode. Build a constellation using either\n"
 					 << "a specified number of Satellites or a specified coverage.\n\n"
 			  	 	 << "\tBuild by: \n" 
@@ -227,5 +225,4 @@ int main(){
 	}
 
 	return 0;	
-
 }

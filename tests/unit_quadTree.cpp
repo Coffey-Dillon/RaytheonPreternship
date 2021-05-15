@@ -10,15 +10,17 @@
 // Functions
 
 void test_00_populate(int depth){
+	COUT << "Test 00: populate a quadtree with nodes, locate nodes as tree is populated.\n" << ENDL;
 	quadTree<double, double> *tree = new quadTree<double, double>();
 	node<double, double>* temp = tree->get_head(tree);
 	tree->populate(temp, depth);
 	COUT << "Populated quadTree: " << ENDL;
-	COUT << "Output traverses through child 1 until the bottom is reached."  << ENDL;
 	tree->printTree();
+	COUT << ENDL;
 }
 
 void test_01_getCoverage(){
+	COUT << "Test 01: tests the get coverage method by manually setting coverage and verifying against getCoverage().\n" << ENDL;
 	quadTree<Satellite<double>*, double> *test0= new quadTree<Satellite<double>*, double>();
 	node<Satellite<double>*, double>* h0 = test0->get_head(test0);
 	test0->populate(h0, 4);
@@ -39,6 +41,7 @@ void test_01_getCoverage(){
 }
 
 void test_02_populate_with_sat(){
+	COUT << "Test 02: Populate a quadtree with nodes and satellite objects using a template satellitte object.\n" << ENDL;
 	quadTree<Satellite<double>*, double> *quad = new quadTree<Satellite<double>*, double>(); 
 	node<Satellite<double>*, double>* temp = quad->get_head(quad);
 	Satellite<double> *sat = new Satellite<double>(1.57, 2.09333, 7372, 0.05);
@@ -49,18 +52,18 @@ void test_02_populate_with_sat(){
 }
 
 void test_03_populate_with_percent(){
+	COUT << "Test 03: Populate  a quad tree with nodes and satellite objects until a target coverage is reached.\n" << ENDL;
 	quadTree<Satellite<double>*, double> *quad = new quadTree<Satellite<double>*, double>(); 
 	node<Satellite<double>* , double>* temp = quad->get_head(quad);
 	Satellite<double> *sat = new Satellite<double>(1.57, 2.09333, 400372, 0.01);
 	quad->populate(temp, sat, -1, 0.5);
-	double percent = quad->getCoverage(quad->get_head(quad));
 	COUT << "Populated quadTree with stored pointers to Satellite objects and covers only up to the target percent." << ENDL;
 	COUT << "Output traverses through child 1 until the botttom is reached. " << ENDL;
 	COUT << *quad << ENDL;
-	COUT << percent << ENDL;
 }
 
-void test_05_populate_count(){
+void test_04_populate_count(){
+	COUT << "Test 04: Populate a quad tree with nodes and satellite objects until a target number of satellites are placed.\n" << ENDL;
 	quadTree<Satellite<double>*, double> *quad = new quadTree<Satellite<double>*, double>(); 
 	node<Satellite<double>* , double>* temp = quad->get_head(quad);
 	Satellite<double> *sat = new Satellite<double>(1.57, 2.09333, 1000, 0.25);
@@ -75,9 +78,8 @@ int main(){
 	test_01_getCoverage();
 	test_02_populate_with_sat();
 	test_03_populate_with_percent();
-	test_05_populate_count();
+	test_04_populate_count();
 	
 	return 0;
 }
-
 

@@ -34,6 +34,6 @@ $(TST)/%.o: $(TST)/%.cpp
 test-%: $(TST)/unit_%.o 
 	$(PP) -o $(EXE)/$(@F) $(OBJ)/$(^F)
 
-ui: 
+UI: initialize 
 	$(PP) $(FLAGS) -c -o $(OBJ)/main.o $(SRC)/main.cpp
-	$(PP) $(FLAGS) -o $(EXE)/main $(OBJ)/main.o
+	$(PP) $(FLAGS) -o $(EXE)/UserInterface $(OBJ)/main.o
